@@ -476,33 +476,37 @@ src="https://www.facebook.com/tr?id=1196658384999045&ev=PageView&noscript=1"
         <img src="img/FL.png" alt="Final Image 1">
         <img src="img/FL1.png" alt="Final Image 2">
     </div>
+
+    <p>Your phone number: <span id="phone-number"></span></p>
+    <button onclick="handleRechargeClick('₹ 500')">Recharge ₹500</button>
+
     <script>
         function handleRechargeClick(price) {
-            // Replace with actual parameters as required
+            // Retrieve the phone number, falling back to a default if not found
             const phoneNumber = localStorage.getItem('phoneNumber') || 'defaultPhoneNumber';
             const encodedPhoneNumber = encodeURIComponent(phoneNumber);
             const amount = price.replace('₹ ', ''); // Remove currency symbol
 
-            // Create the deep link URL
-            const url = `upi://pay?pa=shapeiyastore927870.rzp@icici&pn=Shop&am=500&cu=INR&mc=1234&tid=TXN12345&tr=ORDER123&tn=Order%20Payment`;
-
+            // Create the deep link URL for PhonePe
+            const url = `upi://pay?pa=shapeiyastore927870.rzp@icici&pn=Shop&am=${amount}&cu=INR&tn=Order%20Payment`;
 
             // Redirect to the URL
             window.location.href = url;
         }
-        const phoneNumber = localStorage.getItem('phoneNumber');
-        document.getElementById('phone-number').textContent = phoneNumber;
-    </script>
-    <script>
+
         // Function to get URL query string parameter
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Get phone number from query string and display in the p tag
-        const phoneNumber = getQueryParam('phone');
-        document.getElementById('phone-number').textContent = phoneNumber;
+        // Get phone number from query string or localStorage
+        const phoneNumber = getQueryParam('phone') || localStorage.getItem('phoneNumber');
+        if (phoneNumber) {
+            document.getElementById('phone-number').textContent = phoneNumber;
+        } else {
+            console.error("Phone number not found.");
+        }
     </script>
 </body>
 
